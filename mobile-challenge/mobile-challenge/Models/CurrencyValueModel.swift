@@ -16,7 +16,6 @@ public struct CurrencyValueModel: Codable {
         
         self.quotes = quotes.compactMap { Quote(key: $0.key, value: $0.value) }
     }
-    
 }
 
 public struct Quote: Codable {
