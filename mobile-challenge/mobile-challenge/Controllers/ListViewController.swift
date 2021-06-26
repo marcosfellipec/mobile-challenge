@@ -31,7 +31,7 @@ class ListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var sortButton: UIButton!
     
-    public var currencySelectedEnum: CurrencySelectedEnum = .ONE
+    public var currencySelectedEnum: CurrencySelectedEnum = .left
     public var delegate: ChooseCurrencyDelegate?
     private var sortEnum = SortEnum.nameAsc {
         didSet {        
@@ -103,7 +103,7 @@ class ListViewController: UIViewController {
             }
             switch(result) {
             case .success(let currencyNameModel):
-                self.currencies = currencyNameModel.currencies.array
+                self.currencies = currencyNameModel.currencies
                 self.sortList()
                 
             case .failure(_):

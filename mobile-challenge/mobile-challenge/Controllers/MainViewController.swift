@@ -17,17 +17,17 @@ class MainViewController: UIViewController {
         }
     }
     
-    private var currencyOne = CurrencyDescription() {
+    private var currencyLeft = CurrencyDescription() {
         didSet {
-            currencyOneButtonOutlet.setTitle(currencyOne.key, for: .normal)
+            currencyOneButtonOutlet.setTitle(currencyLeft.key, for: .normal)
         }
     }
-    private var currencyTwo = CurrencyDescription(){
+    private var currencyRight = CurrencyDescription(){
         didSet {
-            currencyTwoButtonOutlet.setTitle(currencyTwo.key, for: .normal)
+            currencyTwoButtonOutlet.setTitle(currencyRight.key, for: .normal)
         }
     }
-    private var selectedCurrencyEnum = CurrencySelectedEnum.ONE {
+    private var selectedCurrencyEnum = CurrencySelectedEnum.left {
         didSet {
             if currencyList.isEmpty {
                 AlertMessage.showOk(title: "Atenção", message: "Antes de selecionar uma moeda, atualize a cotação.")
@@ -44,16 +44,16 @@ class MainViewController: UIViewController {
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var totalQuotesLabel: UILabel!
     
-    @IBAction func currencyOneAction(_ sender: Any) {
-        selectedCurrencyEnum = .ONE
+    @IBAction func currencyLeftAction(_ sender: Any) {
+        selectedCurrencyEnum = .left
     }
     
-    @IBAction func currencyTwoAction(_ sender: Any) {
-        selectedCurrencyEnum = .TWO
+    @IBAction func currencyRightAction(_ sender: Any) {
+        selectedCurrencyEnum = .right
     }
     
     @IBAction func calcAction(_ sender: Any) {
-        guard let currencyOneValueBase = currencyList.filter({$0.key == "USD"+currencyOne.key}).first, let currencyTwoValueBase = currencyList.filter({$0.key == "USD"+currencyTwo.key}).first else {
+        guard let currencyOneValueBase = currencyList.filter({$0.key == "USD"+currencyLeft.key}).first, let currencyTwoValueBase = currencyList.filter({$0.key == "USD"+currencyRight.key}).first else {
             AlertMessage.showOk(title: "Atenção", message: "É necessário selecionar 2 moedas para realizar a conversão.")
             return
         }
@@ -70,14 +70,14 @@ class MainViewController: UIViewController {
     
     @IBAction func swapCurrenciesAction(_ sender: Any) {
         
-        if currencyOne.key.isEmpty || currencyTwo.key.isEmpty {
+        if currencyLeft.key.isEmpty || currencyRight.key.isEmpty {
             AlertMessage.showOk(title: "Atenção", message: "É necessário selecionar 2 moedas primeiro.")
             return
         }
         
-        let currecyAux = currencyTwo
-        currencyTwo = currencyOne
-        currencyOne = currecyAux
+        let currecyAux = currencyRight
+        currencyRight = currencyLeft
+        currencyLeft = currecyAux
         calcAction("")
     }
     
@@ -98,7 +98,7 @@ class MainViewController: UIViewController {
             
             switch (result) {
             case .success(let currencyModel):
-                self.currencyList =  currencyModel.quotes.array
+                self.currencyList = currencyModel.quotes
             case .failure(let error):
                 print(error)
                 AlertMessage.showOk(title: "Atenção", message: "Parece que algo deu errado. Tente novamente.")
@@ -122,10 +122,10 @@ class MainViewController: UIViewController {
 extension MainViewController: ChooseCurrencyDelegate {
     func didSelected(currencyDescription: CurrencyDescription, type: CurrencySelectedEnum) {
         switch type {
-        case .ONE:
-            currencyOne = currencyDescription
-        case .TWO:
-            currencyTwo = currencyDescription
+        case .left:
+            currencyLeft = currencyDescription
+        case .right:
+            currencyRight = currencyDescription
         }
     }
 }

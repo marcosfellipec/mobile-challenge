@@ -8,8 +8,8 @@
 import Foundation
 
 enum CurrencySelectedEnum {
-    case ONE
-    case TWO
+    case left
+    case right
 }
 
 protocol ChooseCurrencyDelegate {
